@@ -1,0 +1,34 @@
+{
+  "name": "reactorrent",
+  "version": "0.0.2",
+  "description": "An example module to illustrate the usage of a package.json",
+  "author": "Johan Lindskogen <johan.lindskogen@gmail.com>",
+  "contributors": [
+    "Pontus Malm <malm@chalmers.it>"
+  ],
+  "main": "src/main.jsx",
+  "scripts": {
+    "watch": "watchify --debug src/main.jsx -o build/app.js -v",
+    "build": "browserify src/main.jsx | uglifyjs --compress --mangle -o build/app.js -- -",
+    "start": "node server.js",
+    "clean": "rm build/app.js"
+  },
+  "devDependencies": {
+    "babelify": "^5.0.4",
+    "browserify": "^9.0.3",
+    "express": "^4.12.2",
+    "uglify-js": "^2.4.16",
+    "watchify": "^2.4.0"
+  },
+  "dependencies": {
+    "xmlrpc": "1.3.x",
+    "es5-shim": "^4.1.0",
+    "react": "^0.12.2",
+    "q": "1.1.2"
+  },
+  "browserify": {
+      "transform": [
+          "babelify"
+      ]
+  }
+}
