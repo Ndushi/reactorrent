@@ -1,16 +1,30 @@
 import React from "react";
 
+function humanFileSize(bytes) {
+    var thresh = 1000;
+    if(bytes < thresh) return bytes + ' B';
+    var units = ['kB','MB','GB','TB','PB','EB','ZB','YB'];
+    var u = -1;
+    do {
+        bytes /= thresh;
+        ++u;
+    } while(bytes >= thresh);
+    return bytes.toFixed(1)+' '+units[u];
+}
+
 var Torrent = React.createClass({
   render() {
     var data = this.props.data;
     return (
       <tr className="torrent">
-        <td>{data.complete}</td>
-        <td>{data.name}</td>
-        <td>{data.message}</td>
-        <td>{data.ratio}</td>
-        <td>{data.down_rate}</td>
-        <td>{data.up_rate}</td>
+        <td>
+          {data.name}
+          <br/>
+          <small>{data.message}</small>
+        </td>
+        <td>{data.complete ? 'DONE' : data.complete}</td>
+        <td>{Math.round(data.ratio / 10) / 100}</td>
+        <td>{humanFileSize(data.up_rate)} / {humanFileSize(data.down_rate)}</td>
       </tr>
     );
   }
@@ -43,14 +57,40 @@ var TorrentTable = React.createClass({
       );
     })
     return (
-      <table className="torrentTable">
+      <table className="torrentTable striped">
+        <tr>
+          <th>Name</th>
+          <th>Status</th>
+          <th>Ratio</th>
+          <th>Rate (up/down)</th>
+        </tr>
         {torrents}
       </table>
     );
   }
 });
 
+var Container = React.createClass({
+  addTorrent(e) {
+    var url = prompt('Enter url:');
+    console.log(url);
+    $.post('/call/load_start', { args: [url] }, function(data) {
+      console.log(data);
+    });
+  },
+  render() {
+    return (
+      <div>
+        <TorrentTable url="/torrents.json" interval={2000} />
+        <div className="fixed-action-btn" style={{bottom: '45px', right: '24px'}}>
+          <a className="btn-floating btn-large waves-effect waves-light red" onClick={this.addTorrent}><i className="mdi-content-add"></i></a>
+        </div>
+      </div>
+    );
+  }
+});
+
 React.render(
-  <TorrentTable url="/torrents.json" interval={2000} />,
-  document.getElementById('content')
+  <Container />,
+  document.body
 );
