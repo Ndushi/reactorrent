@@ -15,6 +15,14 @@ function humanFileSize(bytes) {
 var Torrent = React.createClass({
   render() {
     var data = this.props.data;
+    var percent_done = data.completed_bytes / data.size_bytes;
+    if (percent_done == 1) {
+      percent_done = 'Completed';
+    } else {
+      percent_done = Math.round(percent_done * 10000);
+      percent_done /= 100;
+      percent_done += '%';
+    }
     return (
       <tr className="torrent">
         <td>
@@ -22,7 +30,7 @@ var Torrent = React.createClass({
           <br/>
           <small>{data.message}</small>
         </td>
-        <td>{data.complete ? 'DONE' : data.complete}</td>
+        <td>{percent_done}</td>
         <td>{Math.round(data.ratio / 10) / 100}</td>
         <td>{humanFileSize(data.up_rate)} / {humanFileSize(data.down_rate)}</td>
       </tr>

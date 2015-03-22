@@ -23,8 +23,17 @@ function clientMethodCall(name, args) {
 
 module.exports = {
   getTorrents: function() {
-    return clientMethodCall('d.multicall', ['main', 'd.get_complete=', 'd.get_hash=', 'd.get_name=', 'd.get_message=', 'd.get_ratio=', 'd.get_down_rate=', 'd.get_up_rate='])
-      .then(function(data) {
+    return clientMethodCall('d.multicall', ['main',
+        'd.get_complete=',
+        'd.get_hash=',
+        'd.get_name=',
+        'd.get_message=',
+        'd.get_ratio=',
+        'd.get_down_rate=',
+        'd.get_up_rate=',
+        'd.get_completed_bytes=',
+        'd.get_size_bytes='
+      ]).then(function(data) {
         return data.map(function(torrent) {
           return {
             complete: torrent[0],
@@ -33,7 +42,9 @@ module.exports = {
             message: torrent[3],
             ratio: torrent[4],
             down_rate: torrent[5],
-            up_rate: torrent[6]
+            up_rate: torrent[6],
+            completed_bytes: torrent[7],
+            size_bytes: torrent[8]
           };
         });
       });

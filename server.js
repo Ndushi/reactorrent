@@ -21,10 +21,10 @@ var server = app.listen(8000, function () {
 app.get('/torrents.json', function(req, res) {
   return rTorrent.getTorrents().then(function(torrents) {
     res.json(torrents.sort(function(a, b) {
-      if (b.up_rate - a.up_rate == 0) {
+      if (b.up_rate - a.up_rate == 0 && b.down_rate - a.down_rate == 0) {
         return b.ratio - a.ratio;
       } else {
-        return b.up_rate - a.up_rate;
+        return b.up_rate - a.up_rate + b.down_rate - a.down_rate;
       }
     }));
   });
