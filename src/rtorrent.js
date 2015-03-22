@@ -31,12 +31,13 @@ module.exports = {
         'd.get_ratio=',
         'd.get_down_rate=',
         'd.get_up_rate=',
+        'd.is_hash_checking=',
         'd.get_completed_bytes=',
         'd.get_size_bytes='
       ]).then((data) => {
         return data.map((torrent) => {
-          var [complete, hash, name, message, ratio, down_rate, up_rate, completed_bytes, size_bytes] = torrent;
-          return { complete, hash, name, message, ratio, down_rate, up_rate, completed_bytes, size_bytes };
+          var [complete, hash, name, message, ratio, down_rate, up_rate, is_hash_checking, completed_bytes, size_bytes] = torrent;
+          return { complete, hash, name, message, ratio, down_rate, up_rate, is_hash_checking, completed_bytes, size_bytes };
         });
       });
   },

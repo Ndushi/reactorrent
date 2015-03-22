@@ -12,17 +12,21 @@ function humanFileSize(bytes) {
     return bytes.toFixed(1)+' '+units[u];
 }
 
+function torrent_status(percent_done, hashing) {
+  if (percent_done == 1) {
+    return 'Completed';
+  } else {
+    let msg = hashing == '1' ? 'Hashing' : 'Downloading';
+    percent_done = Math.round(percent_done * 10000);
+    percent_done /= 100;
+    return `${msg}: ${percent_done}%`;
+  }
+}
+
 var Torrent = React.createClass({
   render() {
     var data = this.props.data;
-    var percent_done = data.completed_bytes / data.size_bytes;
-    if (percent_done == 1) {
-      percent_done = 'Completed';
-    } else {
-      percent_done = Math.round(percent_done * 10000);
-      percent_done /= 100;
-      percent_done += '%';
-    }
+    var status = torrent_status(data.completed_bytes / data.size_bytes, data.is_hash_checking);
     return (
       <tr className="torrent">
         <td>
@@ -30,7 +34,7 @@ var Torrent = React.createClass({
           <br/>
           <small>{data.message}</small>
         </td>
-        <td>{percent_done}</td>
+        <td>{status}</td>
         <td>{Math.round(data.ratio / 10) / 100}</td>
         <td>{humanFileSize(data.up_rate)} / {humanFileSize(data.down_rate)}</td>
       </tr>
