@@ -1,20 +1,25 @@
 {
   "name": "reactorrent",
-  "version": "0.0.2",
-  "description": "An example module to illustrate the usage of a package.json",
+  "version": "0.0.5",
+  "description": "rTorrent web frontend build with React",
   "author": "Johan Lindskogen <johan.lindskogen@gmail.com>",
   "contributors": [
     "Pontus Malm <malm@chalmers.it>"
   ],
   "main": "src/main.jsx",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ndushi/reactorrent"
+  },
   "scripts": {
     "watch": "watchify --debug src/main.jsx -o build/app.js -v",
     "build": "browserify src/main.jsx | uglifyjs --compress --mangle -o build/app.js -- -",
-    "start": "node server.js",
+    "start": "babel-node server.js",
     "clean": "rm build/app.js"
   },
   "devDependencies": {
     "babelify": "^5.0.4",
+    "babel": "^4.7.16",
     "browserify": "^9.0.3",
     "express": "^4.12.2",
     "uglify-js": "^2.4.16",

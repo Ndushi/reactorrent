@@ -1,5 +1,5 @@
-var xmlrpc = require('xmlrpc');
-var Q = require('q');
+import xmlrpc from 'xmlrpc';
+import Q from 'q';
 
 var client = xmlrpc.createClient({host: '10.0.0.20', port: 80, path: '/RPC2'});
 
@@ -7,8 +7,8 @@ function clientMethodCall(name, args) {
   var methods = ['d.multicall', 'load_start'];
 
   if (methods.indexOf(name) != -1) {
-    return Q.Promise(function(resolve, reject, notify) {
-      client.methodCall(name, args, function (error, data) {
+    return Q.Promise((resolve, reject, notify) => {
+      client.methodCall(name, args, (error, data) => {
         if (error === null) {
           resolve(data);
         } else {
@@ -22,7 +22,7 @@ function clientMethodCall(name, args) {
 }
 
 module.exports = {
-  getTorrents: function() {
+  getTorrents() {
     return clientMethodCall('d.multicall', ['main',
         'd.get_complete=',
         'd.get_hash=',
@@ -33,19 +33,10 @@ module.exports = {
         'd.get_up_rate=',
         'd.get_completed_bytes=',
         'd.get_size_bytes='
-      ]).then(function(data) {
-        return data.map(function(torrent) {
-          return {
-            complete: torrent[0],
-            hash: torrent[1],
-            name: torrent[2],
-            message: torrent[3],
-            ratio: torrent[4],
-            down_rate: torrent[5],
-            up_rate: torrent[6],
-            completed_bytes: torrent[7],
-            size_bytes: torrent[8]
-          };
+      ]).then((data) => {
+        return data.map((torrent) => {
+          var [complete, hash, name, message, ratio, down_rate, up_rate, completed_bytes, size_bytes] = torrent;
+          return { complete, hash, name, message, ratio, down_rate, up_rate, completed_bytes, size_bytes };
         });
       });
   },
